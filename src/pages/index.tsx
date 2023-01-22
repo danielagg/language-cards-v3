@@ -63,11 +63,11 @@ const Home: NextPage = () => {
       <main
         className={`flex min-h-screen flex-col items-center justify-center bg-gradient-to-b ${getBackgroundGradient()}`}
       >
-        <div className="flex w-1/2 flex-col">
-          <div className="text-center text-8xl font-bold uppercase text-gray-200">
+        <div className="flex w-full flex-col lg:w-1/2">
+          <div className="text-center text-4xl font-bold uppercase text-gray-200 lg:text-8xl">
             {languageCard.data?.spanish}
           </div>
-          <div className="mt-16 flex w-full items-center space-x-2 px-12">
+          <div className="mt-12 flex w-full flex-col items-center space-x-2 px-4 lg:mt-16 lg:flex-row lg:px-12">
             <input
               type="text"
               id="answer"
@@ -81,13 +81,13 @@ const Home: NextPage = () => {
                 setAnswer(e.target.value);
               }}
               autoFocus
-              className="block w-full rounded-lg border-0 p-3 uppercase text-slate-800 ring-0"
+              className="block w-full rounded border-0 p-1 uppercase text-slate-800 ring-0 lg:rounded-lg lg:p-3"
               placeholder={`${
                 languageCard.data?.spanish ?? ""
               } in English is...`}
             />
             <button
-              className="w-36 rounded bg-blue-500 px-12 py-3 text-white hover:bg-blue-300"
+              className="mt-4 w-full rounded bg-blue-500 px-12 py-3 text-white hover:bg-blue-300 lg:mt-0 lg:w-36"
               onClick={() => {
                 if (languageCard.data) {
                   onSubmitAnswer();
