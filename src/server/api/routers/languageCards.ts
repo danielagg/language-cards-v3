@@ -8,30 +8,25 @@ export const languageCardsRouter = createTRPCRouter({
     .input(z.object({ previousCardId: z.string().nullable() }))
     .query(async ({ input, ctx }) => {
       const languageCardCount = await ctx.prisma.languageCard.count();
+      const skip = Math.floor(Math.random() * languageCardCount);
 
       if (input.previousCardId) {
         const result = await ctx.prisma.languageCard.findMany({
           take: 1,
+          skip: skip - 1,
           where: {
             id: {
               not: input.previousCardId,
             },
-          },
-          orderBy: {
-            id: "desc",
           },
         });
 
         return result[0];
       }
 
-      const skip = Math.floor(Math.random() * languageCardCount);
       const result = await ctx.prisma.languageCard.findMany({
         take: 1,
         skip: skip,
-        orderBy: {
-          id: "desc",
-        },
       });
 
       return result[0];
