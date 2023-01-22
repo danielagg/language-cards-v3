@@ -26,7 +26,7 @@ const Home: NextPage = () => {
     const isCorrectAnswer =
       languageCard
         .data!.englishTranslations.map((x) => x.toUpperCase())
-        .indexOf(answer.toUpperCase()) > -1;
+        .indexOf(answer.toUpperCase().trim()) > -1;
 
     setIsCorrectAnswer(isCorrectAnswer);
     setAnswer("");
