@@ -10,27 +10,19 @@ export const languageCardsRouter = createTRPCRouter({
       const languageCardCount = await ctx.prisma.languageCard.count();
 
       if (input.previousCardId) {
-        const previousCard = await ctx.prisma.languageCard.findUnique({
+        const result = await ctx.prisma.languageCard.findMany({
+          take: 1,
           where: {
-            id: input.previousCardId,
+            id: {
+              not: input.previousCardId,
+            },
+          },
+          orderBy: {
+            id: "desc",
           },
         });
 
-        if (previousCard) {
-          const result = await ctx.prisma.languageCard.findMany({
-            take: 1,
-            where: {
-              id: {
-                not: previousCard.id,
-              },
-            },
-            orderBy: {
-              id: "desc",
-            },
-          });
-
-          return result[0];
-        }
+        return result[0];
       }
 
       const skip = Math.floor(Math.random() * languageCardCount);

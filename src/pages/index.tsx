@@ -7,39 +7,47 @@ import { useState } from "react";
 import { api } from "../utils/api";
 
 const Home: NextPage = () => {
-  const [previousCardId, setPreviousCardId] = useState("");
+  const [currentQueryKey, setCurrentQueryKey] = useState("");
 
   const languageCard = api.languageCards.getRandom.useQuery(
-    { previousCardId },
+    { previousCardId: currentQueryKey },
     {
-      onSuccess: (data) => {
-        setPreviousCardId(data?.id ?? "");
-      },
-      enabled: previousCardId === "",
+      keepPreviousData: true,
+      refetchOnMount: false,
+      refetchOnReconnect: false,
+      refetchOnWindowFocus: false,
     }
   );
 
   const [answer, setAnswer] = useState("");
   const [isCorrectAnswer, setIsCorrectAnswer] = useState<boolean | null>(null);
 
-  const onSubmitAnswer = async () => {
-    setIsCorrectAnswer(
+  const onSubmitAnswer = () => {
+    const isCorrectAnswer =
       languageCard
         .data!.englishTranslations.map((x) => x.toUpperCase())
-        .indexOf(answer.toUpperCase()) > -1
+        .indexOf(answer.toUpperCase()) > -1;
+
+    setIsCorrectAnswer(isCorrectAnswer);
+    setAnswer("");
+
+    setTimeout(
+      () => {
+        setCurrentQueryKey(languageCard.data!.id);
+        setIsCorrectAnswer(null);
+      },
+      isCorrectAnswer ? 500 : 2500
     );
+  };
 
-    const waitFor = () =>
-      new Promise(() =>
-        setTimeout(() => {
-          setIsCorrectAnswer(null);
-          setAnswer("");
-        }, 2000)
-      );
-
-    await waitFor();
-
-    await languageCard.refetch();
+  const getBackgroundGradient = () => {
+    if (isCorrectAnswer === true) {
+      return "from-green-800 to-green-900 text-green-200";
+    }
+    if (isCorrectAnswer === false) {
+      return "from-red-800 to-red-900 text-red-200";
+    }
+    return "from-slate-800 to-slate-900 text-slate-800";
   };
 
   return (
@@ -52,7 +60,9 @@ const Home: NextPage = () => {
         />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-blue-800 to-indigo-800 text-slate-800">
+      <main
+        className={`flex min-h-screen flex-col items-center justify-center bg-gradient-to-b ${getBackgroundGradient()}`}
+      >
         <div className="flex w-1/2 flex-col">
           <div className="text-center text-8xl font-bold uppercase text-gray-200">
             {languageCard.data?.spanish}
@@ -62,30 +72,42 @@ const Home: NextPage = () => {
               type="text"
               id="answer"
               value={answer}
-              onChange={(e) => setAnswer(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  onSubmitAnswer();
+                }
+              }}
+              onChange={(e) => {
+                setAnswer(e.target.value);
+              }}
               autoFocus
               className="block w-full rounded-lg border-0 p-3 uppercase text-slate-800 ring-0"
               placeholder={`${
                 languageCard.data?.spanish ?? ""
               } in English is...`}
-              required
             />
             <button
-              className="w-36 rounded bg-green-500 px-12 py-3 hover:bg-green-300"
+              className="w-36 rounded bg-blue-500 px-12 py-3 text-white hover:bg-blue-300"
               onClick={() => {
                 if (languageCard.data) {
-                  onSubmitAnswer().catch((e) => {
-                    console.log(e);
-                  });
+                  onSubmitAnswer();
                 }
               }}
             >
               Submit
             </button>
           </div>
+          <div className="mt-6 h-32 px-12 text-xl">
+            {isCorrectAnswer === false && (
+              <div>
+                The correct answer was:{" "}
+                <span className="font-bold">
+                  {languageCard.data!.englishTranslations[0]}
+                </span>
+              </div>
+            )}
+          </div>
         </div>
-        {isCorrectAnswer === true && <div>Correct!</div>}
-        {isCorrectAnswer === false && <div>InCorrect!</div>}
       </main>
     </>
   );
