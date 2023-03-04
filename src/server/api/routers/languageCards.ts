@@ -1,3 +1,4 @@
+import { LanguageCard } from "@prisma/client";
 import { contextProps } from "@trpc/react-query/shared";
 import { z } from "zod";
 
@@ -31,14 +32,34 @@ export const languageCardsRouter = createTRPCRouter({
 
       return result[0];
     }),
-  // getRandom: publicProcedure
-  // .input(z.object({ text: z.string() }))
-  // .query(({ input }) => {
-  //   return {
-  //     greeting: `Hello ${input.text}`,
-  //   };
-  // }),
-  // getAll: publicProcedure.query(({ ctx }) => {
-  //   return ctx.prisma.languageCard.findMany();
-  // }),
+  setStatistics: publicProcedure
+    .input(z.object({ id: z.string(), correct: z.boolean() }))
+    .mutation(async ({ input, ctx }) => {
+      const languageCard: LanguageCard | null =
+        await ctx.prisma.languageCard.findUnique({
+          where: {
+            id: input.id,
+          },
+        });
+
+      if (!languageCard) {
+        throw new Error("Language card not found");
+      }
+
+      await ctx.prisma.languageCard.update({
+        where: {
+          id: input.id,
+        },
+        data: {
+          ...languageCard,
+          allAttemptedAnswerCount:
+            Number(languageCard.allAttemptedAnswerCount) + 1,
+          correctAnswerCount:
+            Number(languageCard.correctAnswerCount) +
+            Number(input.correct ? 1 : 0),
+        },
+      });
+
+      return languageCard;
+    }),
 });

@@ -19,6 +19,8 @@ const Home: NextPage = () => {
     }
   );
 
+  const setStatistics = api.languageCards.setStatistics.useMutation();
+
   const [answer, setAnswer] = useState("");
   const [isCorrectAnswer, setIsCorrectAnswer] = useState<boolean | null>(null);
 
@@ -31,6 +33,11 @@ const Home: NextPage = () => {
     setIsCorrectAnswer(isCorrectAnswer);
     setAnswer("");
 
+    setStatistics.mutate({
+      id: languageCard.data!.id,
+      correct: isCorrectAnswer,
+    });
+
     setTimeout(
       () => {
         setCurrentQueryKey(languageCard.data!.id);
@@ -40,14 +47,14 @@ const Home: NextPage = () => {
     );
   };
 
-  const getBackgroundGradient = () => {
+  const getBorderColor = () => {
     if (isCorrectAnswer === true) {
-      return "from-green-800 to-green-900 text-green-200";
+      return "border-r-green-500";
     }
     if (isCorrectAnswer === false) {
-      return "from-red-800 to-red-900 text-red-200";
+      return "border-r-red-500";
     }
-    return "from-slate-800 to-slate-900 text-slate-800";
+    return "border-r-slate-200";
   };
 
   return (
@@ -60,10 +67,51 @@ const Home: NextPage = () => {
         />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main
-        className={`flex min-h-screen flex-col items-center justify-center bg-gradient-to-b ${getBackgroundGradient()}`}
-      >
-        <div className="flex w-full flex-col lg:w-1/2">
+      <main className="flex min-h-screen flex-col items-center justify-center bg-slate-800 text-slate-700">
+        <div className="flex w-full">
+          <div
+            className={`min-h-screen w-5/6 border-r-[5rem] ${getBorderColor()} bg-white px-32 py-28`}
+          >
+            <div className="text-8xl font-bold">
+              {languageCard.data?.spanish}
+            </div>
+
+            <div className="mt-12 w-full lg:mt-16">
+              <input
+                type="text"
+                id="answer"
+                value={answer}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    onSubmitAnswer();
+                  }
+                }}
+                onChange={(e) => {
+                  setAnswer(e.target.value);
+                }}
+                autoFocus
+                className="block w-full rounded border-2 p-1 uppercase text-slate-800 ring-0 lg:rounded-lg lg:p-3"
+                placeholder={`${
+                  languageCard.data?.spanish ?? ""
+                } in English is...`}
+              />
+              <div className="mt-4">
+                <button
+                  className="w-full rounded bg-blue-500 px-12 py-3 text-white hover:bg-blue-300 lg:mt-0 lg:w-36"
+                  onClick={() => {
+                    if (languageCard.data) {
+                      onSubmitAnswer();
+                    }
+                  }}
+                >
+                  Submit
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* <div className="flex w-full flex-col lg:w-1/2">
           <div className="text-center text-4xl font-bold uppercase text-gray-200 lg:text-8xl">
             {languageCard.data?.spanish}
           </div>
@@ -107,7 +155,7 @@ const Home: NextPage = () => {
               </div>
             )}
           </div>
-        </div>
+        </div> */}
       </main>
     </>
   );
