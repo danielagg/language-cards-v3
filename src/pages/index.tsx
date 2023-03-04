@@ -1,10 +1,12 @@
-import { LanguageCard } from "@prisma/client";
 import { type NextPage } from "next";
 import Head from "next/head";
-import Link from "next/link";
 import { useState } from "react";
-
 import { api } from "../utils/api";
+import { AnswerStatistics } from "./AnswerStatistics";
+import { HowToPlay } from "./HowToPlay";
+import { OverallAccuracy } from "./OverallAccuracy";
+import { Loader } from "./shared/Loader";
+import { Top10Mistakes } from "./Top10Mistakes";
 
 const Home: NextPage = () => {
   const [currentQueryKey, setCurrentQueryKey] = useState("");
@@ -54,7 +56,7 @@ const Home: NextPage = () => {
     if (isCorrectAnswer === false) {
       return "border-r-red-500";
     }
-    return "border-r-slate-200";
+    return "border-r-purple-300 dark:border-r-purple-900";
   };
 
   return (
@@ -67,47 +69,65 @@ const Home: NextPage = () => {
         />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className="flex min-h-screen flex-col items-center justify-center bg-slate-800 text-slate-700">
+      <main className="flex min-h-screen flex-col items-center justify-center bg-slate-200 text-purple-700 dark:bg-slate-800 dark:text-purple-200">
         <div className="flex w-full">
           <div
-            className={`min-h-screen w-5/6 border-r-[5rem] ${getBorderColor()} bg-white px-32 py-28`}
+            className={`flex min-h-screen w-4/5 items-center justify-center border-r-[5rem] ${getBorderColor()} bg-purple-200 dark:bg-purple-800`}
           >
-            <div className="text-8xl font-bold">
-              {languageCard.data?.spanish}
-            </div>
+            <div className="w-2/3">
+              <div className="text-8xl font-bold">
+                {languageCard.isLoading ? (
+                  <Loader />
+                ) : (
+                  <>{languageCard.data?.spanish}</>
+                )}
+              </div>
 
-            <div className="mt-12 w-full lg:mt-16">
-              <input
-                type="text"
-                id="answer"
-                value={answer}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter") {
-                    onSubmitAnswer();
-                  }
-                }}
-                onChange={(e) => {
-                  setAnswer(e.target.value);
-                }}
-                autoFocus
-                className="block w-full rounded border-2 p-1 uppercase text-slate-800 ring-0 lg:rounded-lg lg:p-3"
-                placeholder={`${
-                  languageCard.data?.spanish ?? ""
-                } in English is...`}
-              />
-              <div className="mt-4">
-                <button
-                  className="w-full rounded bg-blue-500 px-12 py-3 text-white hover:bg-blue-300 lg:mt-0 lg:w-36"
-                  onClick={() => {
-                    if (languageCard.data) {
+              {languageCard.data ? (
+                <AnswerStatistics data={languageCard.data} />
+              ) : (
+                <></>
+              )}
+
+              <div className="mt-12 flex w-full items-center shadow-md lg:mt-16">
+                <input
+                  type="text"
+                  id="answer"
+                  value={answer}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
                       onSubmitAnswer();
                     }
                   }}
-                >
-                  Submit
-                </button>
+                  onChange={(e) => {
+                    setAnswer(e.target.value);
+                  }}
+                  autoFocus
+                  className="block w-full rounded-tl-lg rounded-bl-lg border-2 p-1 uppercase text-slate-800 ring-0 lg:p-3"
+                  placeholder={`${
+                    languageCard.data?.spanish ?? ""
+                  } in English is...`}
+                />
+                <div>
+                  <button
+                    className="inline-block rounded-tr-lg rounded-br-lg bg-teal-600 px-20 py-3 text-center text-lg text-white hover:bg-emerald-500"
+                    onClick={() => {
+                      if (languageCard.data) {
+                        onSubmitAnswer();
+                      }
+                    }}
+                  >
+                    Submit
+                  </button>
+                </div>
               </div>
             </div>
+          </div>
+
+          <div className="flex h-screen w-1/5 flex-col space-y-10 bg-slate-800 p-6 text-slate-400 shadow dark:bg-gray-900 dark:text-slate-500">
+            <HowToPlay />
+            <OverallAccuracy queryKey={currentQueryKey} />
+            <Top10Mistakes queryKey={currentQueryKey} />
           </div>
         </div>
 

@@ -32,6 +32,31 @@ export const languageCardsRouter = createTRPCRouter({
 
       return result[0];
     }),
+  getStatistics: publicProcedure
+    .input(
+      z.object({
+        queryKey: z.string(),
+        hasTop5Limit: z.boolean(),
+      })
+    )
+    .query(async ({ input, ctx }) => {
+      const allLanguageCards = await ctx.prisma.languageCard.findMany({
+        where: {
+          allAttemptedAnswerCount: {
+            gt: 0,
+          },
+        },
+      });
+      const sorted = allLanguageCards
+        .filter((x) => x.allAttemptedAnswerCount !== x.correctAnswerCount)
+        .sort((a: LanguageCard, b: LanguageCard) => {
+          const ratioA = a.allAttemptedAnswerCount - a.correctAnswerCount;
+          const ratioB = b.allAttemptedAnswerCount - b.correctAnswerCount;
+          return ratioB - ratioA;
+        });
+
+      return input.hasTop5Limit ? sorted.slice(0, 5) : sorted;
+    }),
   setStatistics: publicProcedure
     .input(z.object({ id: z.string(), correct: z.boolean() }))
     .mutation(async ({ input, ctx }) => {
