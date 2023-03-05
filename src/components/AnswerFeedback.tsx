@@ -11,11 +11,13 @@ export const AnswerFeedback = ({
     <>
       {isCorrect ? (
         <div>
-          You are <span className="font-bold text-green-400">correct!</span>
+          You are{" "}
+          <span className="font-bold dark:text-green-400">correct!</span>
         </div>
       ) : (
         <div>
-          You are <span className="font-bold text-red-400">incorrect.</span>{" "}
+          You are{" "}
+          <span className="font-bold dark:text-red-400">incorrect.</span>{" "}
           {data.spanish} means{" "}
           <span className="font-bold">
             {data.englishTranslations.join(", ")}
