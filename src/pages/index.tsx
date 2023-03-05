@@ -3,7 +3,7 @@ import Head from "next/head";
 import { useState } from "react";
 import { api } from "../utils/api";
 import { OverallAccuracy } from "../components/OverallAccuracy";
-import { Top10Mistakes } from "../components/Top10Mistakes";
+import { MostCommonMistakes } from "../components/MostCommonMistakes";
 import { Playarea } from "../components/Playarea";
 import { HowToPlay } from "../components/HowToPlay";
 
@@ -42,11 +42,11 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className="flex min-h-screen flex-col items-center justify-center bg-slate-200 text-purple-700 dark:bg-slate-800 dark:text-purple-200">
-        <div className="flex w-full">
+        <div className="flex w-full flex-col lg:flex-row">
           <div
-            className={`flex min-h-screen w-4/5 items-center justify-center border-r-[5rem] ${getBorderColor()} bg-purple-200 dark:bg-purple-800`}
+            className={`flex min-h-screen w-full items-center justify-center lg:w-4/5 lg:border-r-[5rem] ${getBorderColor()} bg-purple-200 dark:bg-purple-800`}
           >
-            <div className="w-2/3">
+            <div className="w-full lg:w-2/3">
               <Playarea
                 isLoading={languageCard.isLoading}
                 data={languageCard.data}
@@ -57,10 +57,10 @@ const Home: NextPage = () => {
             </div>
           </div>
 
-          <div className="flex h-screen w-1/5 flex-col space-y-10 bg-slate-800 p-6 text-slate-400 shadow dark:bg-gray-900 dark:text-slate-500">
+          <div className="flex h-screen w-full flex-col space-y-10 bg-slate-800 p-6 text-slate-400 shadow dark:bg-gray-900 dark:text-slate-500 lg:w-1/5">
             <HowToPlay />
             <OverallAccuracy queryKey={currentQueryKey} />
-            <Top10Mistakes queryKey={currentQueryKey} />
+            <MostCommonMistakes queryKey={currentQueryKey} />
           </div>
         </div>
       </main>

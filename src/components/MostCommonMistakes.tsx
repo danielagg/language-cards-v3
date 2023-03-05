@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { api } from "../utils/api";
 
-export const Top10Mistakes = ({ queryKey }: { queryKey: string }) => {
+export const MostCommonMistakes = ({ queryKey }: { queryKey: string }) => {
   const [hasTop5Limit, setHasTop5Limit] = useState(true);
   const { isLoading, data } = api.languageCards.getMistakes.useQuery({
     queryKey,
@@ -17,7 +17,7 @@ export const Top10Mistakes = ({ queryKey }: { queryKey: string }) => {
         {isLoading ? (
           <div>Loading...</div>
         ) : (
-          <div className="h-[58vh] overflow-y-auto">
+          <div className="h-[50vh] overflow-y-auto lg:h-[58vh]">
             <div className="space-y-4">
               {data!.map((x) => {
                 return (

@@ -48,8 +48,8 @@ export const Playarea = ({
   };
 
   return (
-    <>
-      <div className="text-8xl font-bold">
+    <div className="flex flex-col items-center lg:items-start">
+      <div className="text-4xl font-bold lg:text-8xl">
         {isLoading ? (
           <Loader height="h-24" width="w-24" />
         ) : (
@@ -59,26 +59,29 @@ export const Playarea = ({
 
       {data ? <AnswerStatistics data={data} /> : <></>}
 
-      <div className="mt-12 flex w-full items-center shadow-md lg:mt-16">
-        <input
-          type="text"
-          id="answer"
-          value={answer}
-          onKeyDown={(e) => {
-            if (e.key === "Enter") {
-              onSubmitAnswer();
-            }
-          }}
-          onChange={(e) => {
-            setAnswer(e.target.value);
-          }}
-          autoFocus
-          className="block w-full rounded-tl-lg rounded-bl-lg border-2 p-1 text-slate-800 ring-0 lg:p-3"
-          placeholder={`${data?.spanish ?? ""} in English is...`}
-        />
-        <div>
+      <div className="mt-6 flex w-full flex-col items-center lg:mt-16 lg:flex-row lg:shadow-md">
+        <div className="w-full px-4 lg:px-0">
+          <input
+            type="text"
+            id="answer"
+            value={answer}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                onSubmitAnswer();
+              }
+            }}
+            onChange={(e) => {
+              setAnswer(e.target.value);
+            }}
+            autoFocus
+            className="inline-block w-full rounded-lg border-2 p-2 text-slate-800 ring-0 lg:rounded-tr-none lg:rounded-br-none lg:p-3"
+            placeholder={`${data?.spanish ?? ""} in English is...`}
+          />
+        </div>
+
+        <div className="mt-1 w-full px-4 lg:mt-0 lg:w-auto lg:px-0">
           <button
-            className="inline-block rounded-tr-lg rounded-br-lg bg-teal-600 px-20 py-3 text-center text-lg text-white hover:bg-emerald-500"
+            className="inline w-full rounded-lg bg-teal-600 px-12 py-3 text-center text-white hover:bg-emerald-500 lg:rounded-bl-none lg:rounded-tl-none lg:px-20 lg:text-lg"
             onClick={() => {
               if (data) {
                 onSubmitAnswer();
@@ -89,11 +92,12 @@ export const Playarea = ({
           </button>
         </div>
       </div>
+
       <div className="h-12 py-4">
         {isCorrectAnswer != null && (
           <AnswerFeedback isCorrect={isCorrectAnswer} data={data!} />
         )}
       </div>
-    </>
+    </div>
   );
 };
