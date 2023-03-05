@@ -32,7 +32,31 @@ export const languageCardsRouter = createTRPCRouter({
 
       return result[0];
     }),
-  getStatistics: publicProcedure
+  getOverallAccuracy: publicProcedure
+    .input(
+      z.object({
+        queryKey: z.string(),
+      })
+    )
+    .query(async ({ input, ctx }) => {
+      const allAnswerCount = await ctx.prisma.languageCard.aggregate({
+        _sum: {
+          allAttemptedAnswerCount: true,
+        },
+      });
+      const correctAnswerCount = await ctx.prisma.languageCard.aggregate({
+        _sum: {
+          correctAnswerCount: true,
+        },
+      });
+
+      return {
+        accuracy:
+          correctAnswerCount._sum.correctAnswerCount! /
+          allAnswerCount._sum.allAttemptedAnswerCount!,
+      };
+    }),
+  getMistakes: publicProcedure
     .input(
       z.object({
         queryKey: z.string(),

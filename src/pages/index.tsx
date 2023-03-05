@@ -2,6 +2,7 @@ import { type NextPage } from "next";
 import Head from "next/head";
 import { useState } from "react";
 import { api } from "../utils/api";
+import { AnswerFeedback } from "./AnswerFeedback";
 import { AnswerStatistics } from "./AnswerStatistics";
 import { HowToPlay } from "./HowToPlay";
 import { OverallAccuracy } from "./OverallAccuracy";
@@ -77,7 +78,7 @@ const Home: NextPage = () => {
             <div className="w-2/3">
               <div className="text-8xl font-bold">
                 {languageCard.isLoading ? (
-                  <Loader />
+                  <Loader height="h-24" width="w-24" />
                 ) : (
                   <>{languageCard.data?.spanish}</>
                 )}
@@ -120,6 +121,14 @@ const Home: NextPage = () => {
                     Submit
                   </button>
                 </div>
+              </div>
+              <div className="h-12 py-4">
+                {isCorrectAnswer != null && (
+                  <AnswerFeedback
+                    isCorrect={isCorrectAnswer}
+                    data={languageCard.data!}
+                  />
+                )}
               </div>
             </div>
           </div>

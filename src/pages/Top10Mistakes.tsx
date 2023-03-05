@@ -3,7 +3,7 @@ import { api } from "../utils/api";
 
 export const Top10Mistakes = ({ queryKey }: { queryKey: string }) => {
   const [hasTop5Limit, setHasTop5Limit] = useState(true);
-  const { isLoading, data } = api.languageCards.getStatistics.useQuery({
+  const { isLoading, data } = api.languageCards.getMistakes.useQuery({
     queryKey,
     hasTop5Limit,
   });
