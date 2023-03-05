@@ -1,6 +1,6 @@
 import type { LanguageCard } from "@prisma/client";
 
-export const AnswerStatistics = ({ data }: { data: LanguageCard }) => {
+const AnswerStatistics = ({ data }: { data: LanguageCard }) => {
   return (
     <div className="mt-4 opacity-70">
       {data.allAttemptedAnswerCount > 0 ? (
@@ -16,3 +16,5 @@ export const AnswerStatistics = ({ data }: { data: LanguageCard }) => {
     </div>
   );
 };
+
+export default AnswerStatistics;

@@ -1,6 +1,6 @@
 import { LanguageCard } from "@prisma/client";
 
-export const AnswerFeedback = ({
+const AnswerFeedback = ({
   isCorrect,
   data,
 }: {
@@ -26,3 +26,5 @@ export const AnswerFeedback = ({
     </>
   );
 };
+
+export default AnswerFeedback;
