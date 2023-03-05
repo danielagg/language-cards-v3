@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { api } from "../utils/api";
 
-const Top10Mistakes = ({ queryKey }: { queryKey: string }) => {
+export const Top10Mistakes = ({ queryKey }: { queryKey: string }) => {
   const [hasTop5Limit, setHasTop5Limit] = useState(true);
   const { isLoading, data } = api.languageCards.getMistakes.useQuery({
     queryKey,
@@ -84,5 +84,3 @@ const Top10Mistakes = ({ queryKey }: { queryKey: string }) => {
     </div>
   );
 };
-
-export default Top10Mistakes;

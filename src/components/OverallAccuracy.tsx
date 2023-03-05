@@ -1,7 +1,7 @@
 import { api } from "../utils/api";
-import Loader from "./shared/Loader";
+import { Loader } from "../components/Loader";
 
-const OverallAccuracy = ({ queryKey }: { queryKey: string }) => {
+export const OverallAccuracy = ({ queryKey }: { queryKey: string }) => {
   const { isLoading, data } = api.languageCards.getOverallAccuracy.useQuery({
     queryKey,
   });
@@ -27,4 +27,3 @@ const OverallAccuracy = ({ queryKey }: { queryKey: string }) => {
     </div>
   );
 };
-export default OverallAccuracy;

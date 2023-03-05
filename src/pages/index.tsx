@@ -2,15 +2,21 @@ import { type NextPage } from "next";
 import Head from "next/head";
 import { useState } from "react";
 import { api } from "../utils/api";
-import AnswerFeedback from "./AnswerFeedback";
-import AnswerStatistics from "./AnswerStatistics";
-import HowToPlay from "./HowToPlay";
-import OverallAccuracy from "./OverallAccuracy";
-import Loader from "./shared/Loader";
-import Top10Mistakes from "./Top10Mistakes";
+import { AnswerFeedback } from "../components/AnswerFeedback";
+import { Loader } from "../components/Loader";
+import { AnswerStatistics } from "../components/AnswerStatistics";
+import { HowToPlay } from "../components/HowToPlay";
+import { OverallAccuracy } from "../components/OverallAccuracy";
+import { Top10Mistakes } from "../components/Top10Mistakes";
 
 const Home: NextPage = () => {
+  // we store the current query key in state so that we can avoid refetching the exact same card when fetching the next card, after a submit
+  // initially, this is null, but on each round, we update it, then send it back to the server, which can then use it to avoid returning the same card
+  // essentially, the current query key is the current language card's ID
   const [currentQueryKey, setCurrentQueryKey] = useState("");
+
+  const [answer, setAnswer] = useState("");
+  const [isCorrectAnswer, setIsCorrectAnswer] = useState<boolean | null>(null);
 
   const languageCard = api.languageCards.getRandom.useQuery(
     { previousCardId: currentQueryKey },
@@ -23,9 +29,6 @@ const Home: NextPage = () => {
   );
 
   const setStatistics = api.languageCards.setStatistics.useMutation();
-
-  const [answer, setAnswer] = useState("");
-  const [isCorrectAnswer, setIsCorrectAnswer] = useState<boolean | null>(null);
 
   const onSubmitAnswer = () => {
     const isCorrectAnswer =
@@ -41,6 +44,9 @@ const Home: NextPage = () => {
       correct: isCorrectAnswer,
     });
 
+    // we show a success/failure feedback for a bit
+    // in case of a successful answer, we can get by with .5 sec, as we only show "Correct!",
+    // but with failures, we explain the correct answers, therefore more time is necessary to read
     setTimeout(
       () => {
         setCurrentQueryKey(languageCard.data!.id);
@@ -51,13 +57,10 @@ const Home: NextPage = () => {
   };
 
   const getBorderColor = () => {
-    if (isCorrectAnswer === true) {
-      return "border-r-green-500";
-    }
-    if (isCorrectAnswer === false) {
-      return "border-r-red-500";
-    }
-    return "border-r-purple-300 dark:border-r-purple-900";
+    if (isCorrectAnswer === null)
+      return "border-r-purple-300 dark:border-r-purple-900";
+
+    return isCorrectAnswer ? "border-r-green-500" : "border-r-red-500";
   };
 
   return (

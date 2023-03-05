@@ -1,4 +1,4 @@
-const Loader = ({
+export const Loader = ({
   height,
   width,
 }: {
@@ -25,5 +25,3 @@ const Loader = ({
     <span className="sr-only">Loading...</span>
   </div>
 );
-
-export default Loader;
