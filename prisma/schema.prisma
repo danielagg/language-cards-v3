@@ -13,7 +13,7 @@ datasource db {
 
 model LanguageCard {
     id String @id @default(cuid()) @unique
-    spanish String
+    dutch String
     englishTranslations String[]
     allAttemptedAnswerCount Int @default(0)
     correctAnswerCount Int @default(0)

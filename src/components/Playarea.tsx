@@ -53,7 +53,7 @@ export const Playarea = ({
         {isLoading ? (
           <Loader height="h-24" width="w-24" />
         ) : (
-          <>{data?.spanish}</> // todo: error handling
+          <>{data?.dutch}</> // todo: error handling
         )}
       </div>
 
@@ -75,7 +75,7 @@ export const Playarea = ({
             }}
             autoFocus
             className="inline-block w-full rounded-lg border-2 p-2 text-slate-800 ring-0 lg:rounded-tr-none lg:rounded-br-none lg:p-3"
-            placeholder={`${data?.spanish ?? ""} in English is...`}
+            placeholder={`${data?.dutch ?? ""} in English is...`}
           />
         </div>
 

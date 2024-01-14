@@ -18,7 +18,7 @@ export const AnswerFeedback = ({
         <div>
           You are{" "}
           <span className="font-bold dark:text-red-400">incorrect.</span>{" "}
-          {data.spanish} means{" "}
+          {data.dutch} means{" "}
           <span className="font-bold">
             {data.englishTranslations.join(", ")}
           </span>

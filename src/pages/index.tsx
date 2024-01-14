@@ -34,10 +34,10 @@ const Home: NextPage = () => {
   return (
     <>
       <Head>
-        <title>ES - EN Language Cards</title>
+        <title>ES - NL Language Cards</title>
         <meta
           name="description"
-          content="ES - EN Language Cards to memorize vocab"
+          content="ES - NL Language Cards to memorize vocab"
         />
         <link rel="icon" href="/favicon.ico" />
       </Head>

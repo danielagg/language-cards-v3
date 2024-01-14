@@ -24,7 +24,7 @@ export const MostCommonMistakes = ({ queryKey }: { queryKey: string }) => {
                   <div key={x.id}>
                     <div className="font-bold">
                       <span className="uppercase text-purple-400 dark:text-purple-400">
-                        {x.spanish}
+                        {x.dutch}
                       </span>{" "}
                       - {x.englishTranslations[0]}
                     </div>

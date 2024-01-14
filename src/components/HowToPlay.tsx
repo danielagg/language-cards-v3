@@ -5,7 +5,7 @@ export const HowToPlay = () => {
         How to Play
       </div>
       <div className="mt-4 text-xs">
-        A word in Spanish will be displayed on the screen. Your task is to guess
+        A word in Dutch will be displayed on the screen. Your task is to guess
         its meaning in English, type it in the input field, and press the submit
         button. If you get it right, you will be shown the next word. If you get
         it wrong, you will be shown the correct answer and then the next word.
